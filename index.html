@@ -171,13 +171,14 @@ header{ margin-bottom:14px; }
 .bg-rank{
   position:absolute;
   inset:0;
-  display:grid;
-  place-items:center;
+  display:flex;
+  align-items:center;          /* centraliza na vertical */
+  justify-content:flex-start;  /* cola na esquerda */
+  padding-left:18px;           /* distância da borda interna */
   font-weight:1000;
-  font-size: clamp(88px, 10vw, 140px);
-  opacity:.16;
-  letter-spacing:-6px;
-  transform: translateY(6px);
+  font-size: clamp(90px, 11vw, 160px);
+  opacity:.14;
+  letter-spacing:-8px;
   z-index:0;
   user-select:none;
   pointer-events:none;
@@ -479,3 +480,4 @@ load();
 </script>
 </body>
 </html>
+

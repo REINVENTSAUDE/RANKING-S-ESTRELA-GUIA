@@ -19,13 +19,14 @@
 }
 
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
   color:var(--txt);
   font-family:system-ui,Segoe UI,Roboto,Arial;
   background:
-    radial-gradient(1000px 600px at 20% 10%, #2b1a5a55, transparent 60%),
-    radial-gradient(900px 600px at 80% 30%, #0088aa44, transparent 60%),
+    radial-gradient(1200px 700px at 20% 10%, #2b1a5a55, transparent 60%),
+    radial-gradient(1100px 700px at 80% 30%, #0088aa44, transparent 60%),
     linear-gradient(180deg, var(--bg1), var(--bg2));
 }
 
@@ -67,7 +68,6 @@ header{ margin-bottom:14px; }
   font-weight:800;
   cursor:pointer;
 }
-
 .tab.active{
   border-color:var(--accent);
   box-shadow:0 0 18px #22d3ee55;
@@ -103,27 +103,23 @@ header{ margin-bottom:14px; }
   to{opacity:1;transform:none}
 }
 
-/* POSIÇÕES */
 .shield.p1{
   background:linear-gradient(180deg,var(--gold),#b45309);
   color:#2b1900;
   transform: translateY(-18px) scale(1.05);
   z-index:2;
 }
-
 .shield.p2{
   background:linear-gradient(180deg,var(--silver),#64748b);
   color:#0f172a;
   transform: translateY(10px);
 }
-
 .shield.p3{
   background:linear-gradient(180deg,var(--bronze),#7f1d1d);
   color:#2b0000;
   transform: translateY(10px);
 }
 
-/* TEXTOS */
 .rank{font-size:20px;font-weight:900}
 .name{font-size:17px;font-weight:900;text-transform:uppercase;margin-top:6px}
 .score{font-size:22px;font-weight:900;margin-top:8px}
@@ -134,11 +130,7 @@ header{ margin-bottom:14px; }
   0%,100%{box-shadow:0 0 45px #ffd166cc,0 0 120px #ffd16688}
   50%{box-shadow:0 0 70px #ffd166ff,0 0 160px #ffd166aa}
 }
-
-.champion{
-  animation:champGlow 2.2s ease-in-out infinite;
-}
-
+.champion{ animation:champGlow 2.2s ease-in-out infinite; }
 .champion::after{
   content:"";
   position:absolute;
@@ -147,16 +139,11 @@ header{ margin-bottom:14px; }
   filter:blur(14px);
   z-index:-1;
 }
-
 @keyframes crownFloat{
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-5px)}
 }
-
-.crown{
-  font-size:26px;
-  animation:crownFloat 1.8s ease-in-out infinite;
-}
+.crown{ font-size:26px; animation:crownFloat 1.8s ease-in-out infinite; }
 
 /* LISTA */
 .list{margin-top:18px}
@@ -185,6 +172,64 @@ header{ margin-bottom:14px; }
   .shield{transform:none!important}
   .row{grid-template-columns:60px 1fr 80px}
 }
+
+/* =======================
+   MODO TV (tela grande)
+   ======================= */
+body.tv .wrap{
+  max-width: none;
+  width: 100vw;
+  min-height: 100vh;
+  padding: 3vh 4vw;
+}
+body.tv .board{
+  border-radius: 28px;
+  padding: 22px;
+}
+body.tv .main-title{
+  font-size: clamp(36px, 3.2vw, 64px);
+}
+body.tv .sub-title{
+  font-size: clamp(18px, 1.2vw, 26px);
+}
+body.tv .tab{
+  padding: 14px 18px;
+  font-size: 18px;
+  border-radius: 16px;
+}
+body.tv .top3{
+  gap: 18px;
+}
+body.tv .shield{
+  min-height: 240px;
+  padding: 30px 18px 34px;
+}
+body.tv .rank{ font-size: 28px; }
+body.tv .name{ font-size: 24px; margin-top: 10px; }
+body.tv .score{ font-size: 34px; margin-top: 12px; }
+body.tv .score span{ font-size: 14px; }
+body.tv .crown{ font-size: 34px; }
+
+body.tv .row{
+  grid-template-columns: 90px 1fr 150px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 20px;
+}
+body.tv .list{ margin-top: 22px; }
+
+/* Em TVs (16:9), segura melhor o conteúdo */
+@media (min-width: 1200px) and (min-height: 700px){
+  body.tv .board{
+    min-height: calc(100vh - 170px);
+    display:flex;
+    flex-direction:column;
+  }
+  body.tv .list{
+    flex: 1;
+    overflow:hidden;
+  }
+}
 </style>
 </head>
 
@@ -199,6 +244,7 @@ header{ margin-bottom:14px; }
     <button class="tab" data-key="guiados_estrelas">Guiados / Estrelas</button>
     <button class="tab" data-key="guiados">Guiados</button>
     <button class="tab" id="toggleAuto">⏸ Pausar</button>
+    <button class="tab" id="toggleTv">📺 Modo TV</button>
   </div>
 </header>
 
@@ -214,38 +260,63 @@ header{ margin-bottom:14px; }
 
 <script>
 const DATA_FILE="dados.txt";
-const tabs=["estrelas_guia","guiados_estrelas","guiados"];
-let labels={
+const tabKeys=["estrelas_guia","guiados_estrelas","guiados"];
+const labels={
   estrelas_guia:"Estrelas Guia",
   guiados_estrelas:"Guiados / Estrelas",
   guiados:"Guiados"
 };
 
 let data={},active=0,auto=true;
+
 const top3El=document.getElementById("top3");
 const listEl=document.getElementById("list");
 const pageTitle=document.getElementById("pageTitle");
 const sound=document.getElementById("clickSound");
 const toggleBtn=document.getElementById("toggleAuto");
+const toggleTv=document.getElementById("toggleTv");
 
 function parse(text){
   const out={estrelas_guia:[],guiados_estrelas:[],guiados:[]};
-  const re=/(\d+º)\s+([A-ZÀ-Ú0-9.\-\/ ]+?)\s+(\d+)/gi;
-  text.split(/\r?\n/).forEach(l=>{
-    let m=[],r;
-    while((r=re.exec(l))!==null){
-      m.push({name:r[2].trim(),score:+r[3]});
+  const re=/(\d+\s*º)\s+([A-ZÀ-Ú0-9.\-\/ ]+?)\s+(\d+(?:[.,]\d+)?)\b/gmi;
+
+  text.split(/\r?\n/).forEach(line=>{
+    const upper=line.toUpperCase();
+    if (
+      upper.includes("ESTRELAS") ||
+      upper.includes("GUIADOS/") ||
+      upper.trim()==="GUIADOS" ||
+      upper.includes("VENDEDOR") ||
+      upper.includes("VIDAS")
+    ) return;
+
+    const m=[];
+    let r;
+    while((r=re.exec(line))!==null){
+      const name=(r[2]||"").trim().replace(/\s{2,}/g," ");
+      const score=Number(String(r[3]).replace(",","."));
+      if(!name || !Number.isFinite(score)) continue;
+      m.push({name,score});
     }
     if(m[0]) out.estrelas_guia.push(m[0]);
     if(m[1]) out.guiados_estrelas.push(m[1]);
     if(m[2]) out.guiados.push(m[2]);
   });
-  Object.keys(out).forEach(k=>out[k].sort((a,b)=>b.score-a.score));
+
+  Object.keys(out).forEach(k=>{
+    out[k].sort((a,b)=>(b.score-a.score) || a.name.localeCompare(b.name,"pt-BR"));
+  });
   return out;
 }
 
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
 function render(){
-  const key=tabs[active];
+  const key=tabKeys[active];
   const items=data[key]||[];
   pageTitle.textContent=labels[key];
 
@@ -260,7 +331,7 @@ function render(){
     <div class="shield p${v.p} ${v.p===1?"champion":""}">
       ${v.p===1?'<div class="crown">👑</div>':''}
       <div class="rank">${v.p}º</div>
-      <div class="name">${v.i.name}</div>
+      <div class="name">${escapeHtml(v.i.name)}</div>
       <div class="score">${v.i.score}<span>vidas</span></div>
     </div>
   `).join("");
@@ -268,7 +339,7 @@ function render(){
   listEl.innerHTML=items.slice(3).map((i,idx)=>`
     <div class="row">
       <div class="pos">${idx+4}º</div>
-      <div class="who">${i.name}</div>
+      <div class="who">${escapeHtml(i.name)}</div>
       <div class="val">${i.score}</div>
     </div>
   `).join("");
@@ -280,12 +351,20 @@ async function load(){
   render();
 }
 
+function clickSound(){
+  try{
+    sound.volume=.22;
+    sound.currentTime=0;
+    sound.play();
+  }catch(e){}
+}
+
 document.querySelectorAll(".tab[data-key]").forEach((b,idx)=>{
   b.onclick=()=>{
     active=idx;
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".tab[data-key]").forEach(x=>x.classList.remove("active"));
     b.classList.add("active");
-    sound.volume=.25; sound.play();
+    clickSound();
     render();
   };
 });
@@ -295,9 +374,25 @@ toggleBtn.onclick=()=>{
   toggleBtn.textContent=auto?"⏸ Pausar":"▶️ Continuar";
 };
 
+toggleTv.onclick=async ()=>{
+  document.body.classList.toggle("tv");
+  const on=document.body.classList.contains("tv");
+  toggleTv.textContent=on?"🖥 Sair TV":"📺 Modo TV";
+  // tenta fullscreen (alguns navegadores/TVs bloqueiam se não for click do usuário — aqui é click)
+  if(on){
+    try{
+      if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+    }catch(e){}
+  }else{
+    try{
+      if(document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen();
+    }catch(e){}
+  }
+};
+
 setInterval(()=>{
   if(!auto) return;
-  active=(active+1)%tabs.length;
+  active=(active+1)%tabKeys.length;
   document.querySelectorAll(".tab[data-key]")[active].click();
 },30000);
 

@@ -425,7 +425,7 @@ function render(){
 
   top3El.innerHTML=visual.map(v=>`
     <div class="shield p${v.p} ${v.p===1?"champion":""}">
-      <div class="bg-rank">${v.p}</div>
+      <div class="bg-rank">${v.p}º</div>
       <div class="front">
         ${v.p===1?'<div class="crown">👑</div>':''}
         <div class="rank">${v.p}º</div>
@@ -486,6 +486,7 @@ load();
 </script>
 </body>
 </html>
+
 
 
 

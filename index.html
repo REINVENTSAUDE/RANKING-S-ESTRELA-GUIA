@@ -1,600 +1,282 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ranking</title>
-  <style>
-    :root{
-      --bg1:#070A12;
-      --bg2:#0B1024;
-      --card:#0e1636cc;
-      --stroke:#ffffff18;
-      --txt:#eaf0ff;
-      --muted:#a9b5e6;
-      --gold:#ffd166;
-      --silver:#cbd5e1;
-      --bronze:#fb7185;
-      --accent:#7c3aed;
-      --accent2:#22d3ee;
-      --good:#34d399;
-      --bad:#fb7185;
-      --shadow: 0 20px 60px #00000066;
-    }
+<meta charset="utf-8">
+<title>Ranking Estrelas Guia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      color:var(--txt);
-      font: 500 16px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1200px 800px at 20% 10%, #2b1a5a55, transparent 60%),
-        radial-gradient(900px 700px at 80% 30%, #0088aa44, transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      overflow-x:hidden;
-    }
+<style>
+:root{
+  --bg1:#070A12;
+  --bg2:#0B1024;
+  --stroke:#ffffff18;
+  --txt:#eaf0ff;
+  --muted:#a9b5e6;
+  --gold:#ffd166;
+  --silver:#cbd5e1;
+  --bronze:#fb7185;
+  --accent:#22d3ee;
+}
 
-    .glow{
-      position:fixed; inset:-200px;
-      background:
-        conic-gradient(from 180deg, #7c3aed44, #22d3ee33, #ffd16622, #7c3aed44);
-      filter: blur(80px);
-      opacity:.35;
-      animation: spin 12s linear infinite;
-      pointer-events:none;
-      z-index:0;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  color:var(--txt);
+  font-family:system-ui,Segoe UI,Roboto,Arial;
+  background:
+    radial-gradient(1000px 600px at 20% 10%, #2b1a5a55, transparent 60%),
+    radial-gradient(900px 600px at 80% 30%, #0088aa44, transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+}
 
-    .wrap{
-      position:relative;
-      z-index:1;
-      max-width: 980px;
-      margin: 36px auto;
-      padding: 0 18px 48px;
-    }
+.wrap{
+  max-width:1000px;
+  margin:auto;
+  padding:24px;
+}
 
-    header{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom: 18px;
-    }
+header{
+  margin-bottom:20px;
+}
 
-    .title{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      min-width: 0;
-    }
-    h1{
-      margin:0;
-      font-size: clamp(22px, 3vw, 34px);
-      letter-spacing:.4px;
-    }
-    .sub{
-      color:var(--muted);
-      font-size: 14px;
-    }
+.main-title{
+  font-size:40px;
+  font-weight:900;
+  letter-spacing:1px;
+  margin:0;
+  text-transform:uppercase;
+}
 
-    .tabbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 2px;
-    }
-    .tab{
-      appearance:none;
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, #1a2456aa, #0f173dcc);
-      color:var(--txt);
-      padding:10px 12px;
-      border-radius: 12px;
-      cursor:pointer;
-      box-shadow: 0 8px 24px #0000003a;
-      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
-      font-weight:800;
-      letter-spacing:.2px;
-    }
-    .tab:hover{ transform: translateY(-1px); border-color:#ffffff35; }
-    .tab:active{ transform: translateY(0px) scale(.99); }
-    .tab.active{
-      border-color: #22d3ee66;
-      background: linear-gradient(180deg, #1a2d64cc, #0f1a46cc);
-      box-shadow: 0 10px 30px #00000055, 0 0 0 3px #22d3ee22, 0 0 22px #22d3ee33;
-    }
+.sub-title{
+  font-size:20px;
+  font-weight:800;
+  color:var(--accent);
+  margin-top:6px;
+}
 
-    .actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
+.tabbar{
+  display:flex;
+  gap:12px;
+  margin:16px 0;
+  flex-wrap:wrap;
+}
 
-    .btn{
-      appearance:none;
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, #1a2456aa, #0f173dcc);
-      color:var(--txt);
-      padding:10px 12px;
-      border-radius: 12px;
-      cursor:pointer;
-      box-shadow: 0 8px 24px #0000003a;
-      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
-      font-weight:650;
-    }
-    .btn:hover{ transform: translateY(-1px); border-color:#ffffff35; }
-    .btn:active{ transform: translateY(0px) scale(.99); }
+.tab{
+  padding:12px 18px;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+  background:#0b1130cc;
+  color:var(--txt);
+  font-weight:800;
+  cursor:pointer;
+}
 
-    .pill{
-      padding:10px 12px;
-      border:1px solid var(--stroke);
-      border-radius:12px;
-      background: #0b1130aa;
-      color:var(--muted);
-      font-size:13px;
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:999px;
-      background: var(--good);
-      box-shadow: 0 0 0 3px #34d39922, 0 0 18px #34d39955;
-    }
+.tab.active{
+  border-color:var(--accent);
+  box-shadow:0 0 18px #22d3ee55;
+}
 
-    .board{
-      position:relative;
-      border:1px solid var(--stroke);
-      border-radius: 18px;
-      background: linear-gradient(180deg, #0d1433cc, #0a1028cc);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
+.board{
+  border:1px solid var(--stroke);
+  border-radius:20px;
+  background:#0c1433cc;
+  padding:16px;
+}
 
-    .grid{
-      position:absolute; inset:0;
-      background-image:
-        linear-gradient(#ffffff10 1px, transparent 1px),
-        linear-gradient(90deg, #ffffff10 1px, transparent 1px);
-      background-size: 44px 44px;
-      opacity:.25;
-      mask-image: radial-gradient(700px 320px at 50% 0%, #000, transparent 70%);
-      pointer-events:none;
-    }
+/* TOP 3 */
+.top3{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:14px;
+}
 
-    .top3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:12px;
-      padding: 14px;
-      border-bottom:1px solid var(--stroke);
-    }
+.shield{
+  clip-path:polygon(50% 0%,90% 15%,90% 65%,50% 100%,10% 65%,10% 15%);
+  text-align:center;
+  padding:30px 14px;
+  transition:transform .25s ease, opacity .25s ease;
+  animation:fadeUp .4s ease;
+}
 
-    .podium{
-      border:1px solid var(--stroke);
-      border-radius:16px;
-      background: linear-gradient(180deg, #121c44cc, #0c1332cc);
-      padding:14px;
-      min-height: 110px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      position:relative;
-      overflow:hidden;
-      transform: translateZ(0);
-    }
-    .podium::after{
-      content:"";
-      position:absolute; inset:-40px -40px auto auto;
-      width:140px;height:140px;
-      background: radial-gradient(circle at 30% 30%, #22d3ee55, transparent 60%);
-      filter: blur(10px);
-      opacity:.6;
-      pointer-events:none;
-    }
-    .podium .rank{
-      font-weight:800;
-      letter-spacing:.6px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-    .badge{
-      width:34px;height:34px;border-radius:12px;
-      display:grid;place-items:center;
-      border:1px solid var(--stroke);
-      background: #0b1130aa;
-      font-weight:900;
-      flex: 0 0 auto;
-    }
-    .name{
-      font-weight:800;
-      font-size: 16px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      min-width:0;
-    }
-    .stars{
-      margin-top:auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      color:var(--muted);
-      font-size:13px;
-    }
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
 
-    .starbar{
-      display:flex;
-      gap:4px;
-      align-items:center;
-      filter: drop-shadow(0 0 12px #ffd16633);
-    }
-    .star{
-      width:18px;height:18px;
-      display:inline-block;
-      background: conic-gradient(from 0deg, #ffe08a, #ffd166, #ffb703, #ffd166);
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-      opacity:.95;
-    }
-    .star.off{
-      background: #ffffff22;
-      filter:none;
-      opacity:.55;
-    }
+.shield.p1{
+  background:linear-gradient(180deg,var(--gold),#b45309);
+  color:#2b1900;
+  transform:scale(1.1);
+  box-shadow:0 0 40px #ffd166aa;
+}
 
-    .list{
-      padding: 8px 14px 14px;
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 70px 1fr 140px;
-      gap:12px;
-      align-items:center;
-      padding: 12px 10px;
-      border-radius: 14px;
-      border:1px solid transparent;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-      position:relative;
-      overflow:hidden;
-    }
-    .row:hover{
-      transform: translateY(-1px);
-      background: #0b1130aa;
-      border-color: var(--stroke);
-    }
+.shield.p2{
+  background:linear-gradient(180deg,var(--silver),#64748b);
+  color:#0f172a;
+}
 
-    .pos{
-      font-weight:900;
-      letter-spacing:.3px;
-      color: var(--muted);
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .pos .mini{
-      width:10px;height:10px;border-radius:999px;
-      background:#ffffff22;
-    }
+.shield.p3{
+  background:linear-gradient(180deg,var(--bronze),#7f1d1d);
+  color:#2b0000;
+}
 
-    .row.top1 .pos{ color: var(--gold); }
-    .row.top2 .pos{ color: var(--silver); }
-    .row.top3 .pos{ color: var(--bronze); }
-    .row.top1 .pos .mini{ background: var(--gold); box-shadow: 0 0 14px #ffd16655; }
-    .row.top2 .pos .mini{ background: var(--silver); box-shadow: 0 0 14px #cbd5e155; }
-    .row.top3 .pos .mini{ background: var(--bronze); box-shadow: 0 0 14px #fb718555; }
+.crown{
+  font-size:32px;
+}
 
-    .who{
-      font-weight:800;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+.rank{
+  font-size:26px;
+  font-weight:900;
+}
 
-    .score{
-      text-align:right;
-      font-weight:900;
-      display:flex;
-      justify-content:flex-end;
-      align-items:center;
-      gap:10px;
-      color: var(--txt);
-      white-space:nowrap;
-    }
-    .score small{
-      color:var(--muted);
-      font-weight:700;
-    }
+.name{
+  font-size:22px;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-top:8px;
+}
 
-    .toast{
-      margin-top:12px;
-      color:var(--muted);
-      font-size:12px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      opacity:.95;
-      flex-wrap:wrap;
-    }
+.score{
+  font-size:30px;
+  font-weight:900;
+  margin-top:10px;
+}
 
-    @media (max-width: 640px){
-      .row{ grid-template-columns: 62px 1fr 120px; }
-      .score{ gap:8px; }
-      .top3{ grid-template-columns: 1fr; }
-    }
-  </style>
+.score span{
+  display:block;
+  font-size:13px;
+  opacity:.85;
+}
+
+/* LISTA */
+.list{
+  margin-top:18px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:70px 1fr 120px;
+  padding:10px;
+  border-radius:12px;
+  margin-bottom:6px;
+}
+
+.row:nth-child(odd){
+  background:#0b1130aa;
+}
+
+.pos{
+  font-weight:900;
+  color:var(--muted);
+}
+
+.who{
+  font-weight:800;
+}
+
+.val{
+  text-align:right;
+  font-weight:900;
+}
+</style>
 </head>
+
 <body>
-  <div class="glow" aria-hidden="true"></div>
+<div class="wrap">
+<header>
+  <h1 class="main-title">⭐ Ranking Estrelas Guia</h1>
+  <div id="pageTitle" class="sub-title">Estrelas Guia</div>
 
-  <div class="wrap">
-    <header>
-      <div class="title">
-        <h1 id="pageTitle">🏆 Ranking</h1>
-
-        <div class="tabbar" id="tabbar">
-          <!-- botões entram via JS -->
-        </div>
-
-        <div class="sub">Edite o arquivo <b>dados.txt</b> e recarregue.</div>
-      </div>
-
-      <div class="actions">
-        <div class="pill" title="Status de leitura do arquivo">
-          <span class="dot" id="statusDot"></span>
-          <span id="statusText">Pronto</span>
-        </div>
-        <button class="btn" id="reloadBtn">Recarregar</button>
-      </div>
-    </header>
-
-    <section class="board">
-      <div class="grid" aria-hidden="true"></div>
-
-      <div class="top3" id="top3"></div>
-      <div class="list" id="list"></div>
-    </section>
-
-    <div class="toast">
-      <span id="footerLeft">Fonte: dados.txt</span>
-      <span id="footerRight"></span>
-    </div>
+  <div class="tabbar">
+    <button class="tab active" data-key="estrelas_guia">Estrelas Guia</button>
+    <button class="tab" data-key="guiados_estrelas">Guiados / Estrelas</button>
+    <button class="tab" data-key="guiados">Guiados</button>
   </div>
+</header>
 
-  <script>
-    const DATA_FILE = "dados.txt";
+<section class="board">
+  <div class="top3" id="top3"></div>
+  <div class="list" id="list"></div>
+</section>
+</div>
 
-    // 3 rankings
-    const TABS = [
-      { key: "estrelas_guia", label: "Estrelas Guia", unitLabel: "vidas" },
-      { key: "guiados_estrelas", label: "Guiados/Estrelas", unitLabel: "vidas" },
-      { key: "guiados", label: "Guiados", unitLabel: "vidas" },
-    ];
+<audio id="clickSound">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3">
+</audio>
 
-    // Visual de estrela (só estética)
-    const MAX_STARS_VISUAL = 5;
+<script>
+const DATA_FILE="dados.txt";
+const tabs=[
+  {key:"estrelas_guia",label:"Estrelas Guia"},
+  {key:"guiados_estrelas",label:"Guiados / Estrelas"},
+  {key:"guiados",label:"Guiados"}
+];
 
-    const statusDot = document.getElementById("statusDot");
-    const statusText = document.getElementById("statusText");
-    const footerRight = document.getElementById("footerRight");
-    const listEl = document.getElementById("list");
-    const top3El = document.getElementById("top3");
-    const tabbarEl = document.getElementById("tabbar");
-    const pageTitleEl = document.getElementById("pageTitle");
+let data={},active="estrelas_guia";
+const top3El=document.getElementById("top3");
+const listEl=document.getElementById("list");
+const pageTitle=document.getElementById("pageTitle");
+const sound=document.getElementById("clickSound");
 
-    document.getElementById("reloadBtn").addEventListener("click", load);
-
-    let allDataByTab = null;
-    let activeTabKey = TABS[0].key;
-
-    function setStatus(ok, msg){
-      statusDot.style.background = ok ? "var(--good)" : "var(--bad)";
-      statusDot.style.boxShadow = ok
-        ? "0 0 0 3px #34d39922, 0 0 18px #34d39955"
-        : "0 0 0 3px #fb718522, 0 0 18px #fb718555";
-      statusText.textContent = msg;
+function parse(text){
+  const out={estrelas_guia:[],guiados_estrelas:[],guiados:[]};
+  const re=/(\d+º)\s+([A-ZÀ-Ú0-9.\-\/ ]+?)\s+(\d+)/gi;
+  text.split(/\r?\n/).forEach(l=>{
+    let m=[],r;
+    while((r=re.exec(l))!==null){
+      m.push({name:r[2].trim(),score:+r[3],pos:r[1],x:r.index});
     }
-
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, (m) => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-      }[m]));
-    }
-
-    function normalizeLine(line){
-      return line
-        .replace(/\u00A0/g, " ")
-        .replace(/[ ]{2,}/g, " ")
-        .trimEnd(); // mantém possíveis tabs no meio
-    }
-
-    function looksLikePos(x){
-      return /^\d+\s*º$/i.test(String(x || "").trim());
-    }
-
-    function toNumber(x){
-      const n = Number(String(x || "").replace(",", ".").trim());
-      return Number.isFinite(n) ? n : null;
-    }
-
-    function parseTripleTable(text){
-  // Aguenta TAB ou vários espaços, e 1/2/3 colunas na mesma linha
-  // Pega padrões tipo: 1º  NOME  16   (repetindo até 3x na linha)
-  const out = {
-    estrelas_guia: [],
-    guiados_estrelas: [],
-    guiados: []
-  };
-
-  const rows = text.split(/\r?\n/).map(normalizeLine);
-
-  // match global: "1º EMILIENE 16" / "10º VICTOR FIRMINO 0"
-  const re = /(\d+\s*º)\s+([A-ZÀ-Ú0-9.\-\/ ]+?)\s+(\d+(?:[.,]\d+)?)\b/gmi;
-
-  for (const raw of rows){
-    if (!raw) continue;
-
-    const upper = raw.toUpperCase();
-    if (
-      upper.includes("ESTRELAS") ||
-      upper.includes("GUIADOS/") ||
-      upper === "GUIADOS" ||
-      upper.includes("VENDEDOR") ||
-      upper.includes("VIDAS")
-    ) continue;
-
-    const matches = [];
-    let m;
-    while ((m = re.exec(raw)) !== null){
-      const pos = m[1].replace(/\s+/g,"").toUpperCase(); // "1º"
-      const name = m[2].trim().replace(/\s{2,}/g," ");
-      const score = toNumber(m[3]);
-
-      if (!looksLikePos(pos) || !name || score === null) continue;
-
-      matches.push({ pos, name, score, start: m.index });
-    }
-
-    if (matches.length === 0) continue;
-
-    // Se veio 3 na linha, é perfeito: 1ª->estrelas_guia, 2ª->guiados_estrelas, 3ª->guiados
-    if (matches.length >= 3){
-      out.estrelas_guia.push(matches[0]);
-      out.guiados_estrelas.push(matches[1]);
-      out.guiados.push(matches[2]);
-      continue;
-    }
-
-    // Se veio 1 ou 2, decide pelo "lugar" no texto (esquerda/meio/direita)
-    // (funciona bem com o bloco do Bloco de Notas)
-    const L = raw.length;
-    for (const it of matches){
-      const ratio = it.start / Math.max(1, L);
-      if (ratio < 0.34) out.estrelas_guia.push(it);
-      else if (ratio < 0.67) out.guiados_estrelas.push(it);
-      else out.guiados.push(it);
-    }
-  }
-
-  // Ordena e reatribui 1º,2º,3º...
-  for (const tab of TABS){
-    const arr = out[tab.key];
-    arr.sort((a,b) => (b.score - a.score) || a.name.localeCompare(b.name, "pt-BR"));
-    arr.forEach((it, idx) => it.pos = (idx + 1) + "º");
-  }
-
+    if(m[0]) out.estrelas_guia.push(m[0]);
+    if(m[1]) out.guiados_estrelas.push(m[1]);
+    if(m[2]) out.guiados.push(m[2]);
+  });
+  Object.keys(out).forEach(k=>{
+    out[k].sort((a,b)=>b.score-a.score);
+  });
   return out;
 }
-    function starBar(score){
-      const n = Math.max(0, Math.min(MAX_STARS_VISUAL, Math.round(score)));
-      const off = MAX_STARS_VISUAL - n;
-      let html = "";
-      for(let i=0;i<n;i++) html += `<span class="star" aria-hidden="true"></span>`;
-      for(let i=0;i<off;i++) html += `<span class="star off" aria-hidden="true"></span>`;
-      return `<div class="starbar" title="${score}">${html}</div>`;
-    }
 
-    function renderTabs(){
-      tabbarEl.innerHTML = TABS.map(t => `
-        <button class="tab ${t.key === activeTabKey ? "active" : ""}"
-                data-key="${t.key}">
-          ${escapeHtml(t.label)}
-        </button>
-      `).join("");
+function render(){
+  const items=data[active]||[];
+  pageTitle.textContent=tabs.find(t=>t.key===active).label;
 
-      tabbarEl.querySelectorAll(".tab").forEach(btn => {
-        btn.addEventListener("click", () => {
-          activeTabKey = btn.dataset.key;
-          renderTabs();
-          renderActive();
-        });
-      });
-    }
+  const top=items.slice(0,3);
+  top3El.innerHTML=top.map((i,idx)=>`
+    <div class="shield p${idx+1}">
+      ${idx===0?'<div class="crown">👑</div>':''}
+      <div class="rank">${idx+1}º</div>
+      <div class="name">${i.name}</div>
+      <div class="score">${i.score}<span>vidas</span></div>
+    </div>
+  `).join("");
 
-    function renderActive(){
-      if (!allDataByTab) return;
+  listEl.innerHTML=items.slice(3).map((i,idx)=>`
+    <div class="row">
+      <div class="pos">${idx+4}º</div>
+      <div class="who">${i.name}</div>
+      <div class="val">${i.score}</div>
+    </div>
+  `).join("");
+}
 
-      const tab = TABS.find(t => t.key === activeTabKey) || TABS[0];
-      const items = allDataByTab[tab.key] || [];
+async function load(){
+  const t=await fetch(DATA_FILE+"?v="+Date.now()).then(r=>r.text());
+  data=parse(t);
+  render();
+}
 
-      pageTitleEl.textContent = "🏆 " + tab.label;
+document.querySelectorAll(".tab").forEach(b=>{
+  b.onclick=()=>{
+    active=b.dataset.key;
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    sound.volume=0.3;
+    sound.play();
+    render();
+  };
+});
 
-      if (items.length === 0){
-        top3El.innerHTML = "";
-        listEl.innerHTML = `
-          <div style="padding:14px;color:var(--muted)">
-            Nenhum dado encontrado para <b>${escapeHtml(tab.label)}</b>.
-            <br><br>
-            Dica: confira se o bloco desse ranking está preenchido no <b>dados.txt</b> com colunas separadas por TAB.
-          </div>
-        `;
-        return;
-      }
-
-      // Top 3
-      const top = items.slice(0,3);
-      const podiumLabels = ["1º", "2º", "3º"];
-
-      top3El.innerHTML = top.map((it, idx) => `
-        <div class="podium">
-          <div class="rank">
-            <span class="badge">${podiumLabels[idx]}</span>
-            <span class="name">${escapeHtml(it.name)}</span>
-          </div>
-          <div class="stars">
-            ${starBar(it.score)}
-            <div><b>${it.score}</b> <span style="color:var(--muted)">${escapeHtml(tab.unitLabel)}</span></div>
-          </div>
-        </div>
-      `).join("");
-
-      // Lista completa
-      listEl.innerHTML = items.map((it, idx) => {
-        const cls = idx===0 ? "row top1" : idx===1 ? "row top2" : idx===2 ? "row top3" : "row";
-        return `
-          <div class="${cls}">
-            <div class="pos"><span class="mini"></span>${escapeHtml(it.pos)}</div>
-            <div class="who">${escapeHtml(it.name)}</div>
-            <div class="score"><small>${escapeHtml(tab.unitLabel)}</small> <span>${it.score}</span></div>
-          </div>
-        `;
-      }).join("");
-
-      const now = new Date();
-      footerRight.textContent = "Atualizado em " + now.toLocaleString("pt-BR");
-    }
-
-    async function load(){
-      try{
-        setStatus(true, "Lendo dados...");
-        const res = await fetch(`${DATA_FILE}?v=${Date.now()}`);
-        if(!res.ok) throw new Error("Não consegui ler dados.txt (status " + res.status + ")");
-        const txt = await res.text();
-
-        allDataByTab = parseTripleTable(txt);
-        renderTabs();
-        renderActive();
-        setStatus(true, "OK");
-      }catch(err){
-        console.error(err);
-        setStatus(false, "Falhou");
-        listEl.innerHTML = `
-          <div style="padding:14px;color:var(--muted)">
-            <b>Não consegui carregar/ler o arquivo.</b><br><br>
-            <div style="margin-top:10px;opacity:.9"><code>${escapeHtml(String(err.message || err))}</code></div>
-          </div>
-        `;
-      }
-    }
-
-    load();
-    setInterval(load, 10000);
-  </script>
+load();
+</script>
 </body>
 </html>

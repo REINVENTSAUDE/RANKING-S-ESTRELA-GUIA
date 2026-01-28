@@ -174,7 +174,7 @@ header{ margin-bottom:14px; }
   display:flex;
   align-items:center;          /* centraliza na vertical */
   justify-content:flex-start;  /* cola na esquerda */
-  padding-left:24px;           /* distância da borda interna */
+  padding-left:30px;           /* distância da borda interna */
   font-weight:1000;
   font-size: clamp(90px, 11vw, 160px);
   opacity:.14;
@@ -183,6 +183,9 @@ header{ margin-bottom:14px; }
   user-select:none;
   pointer-events:none;
   mix-blend-mode: soft-light;
+  text-shadow:
+  0 0 2px rgba(0,0,0,.25),
+  0 0 6px rgba(0,0,0,.18);
 }
 
 /* garante que o conteúdo fique na frente do número */
@@ -480,5 +483,6 @@ load();
 </script>
 </body>
 </html>
+
 
 

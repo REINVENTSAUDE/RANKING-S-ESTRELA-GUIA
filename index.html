@@ -309,6 +309,31 @@ body.tv .row{
   border-radius: 16px;
   font-size: 22px;
 }
+  /* wrapper do pódio */
+.podium-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+
+/* número acima do escudo */
+.podium-rank{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.5px;
+  opacity:.9;
+}
+
+/* cores conforme posição */
+.podium-wrap.p1 .podium-rank{ color: var(--gold); }
+.podium-wrap.p2 .podium-rank{ color: var(--silver); }
+.podium-wrap.p3 .podium-rank{ color: var(--bronze); }
+
+/* no modo TV fica maior */
+body.tv .podium-rank{
+  font-size:32px;
+}
 </style>
 </head>
 
@@ -424,7 +449,12 @@ function render(){
   ].filter(x=>x.i);
 
   top3El.innerHTML=visual.map(v=>`
-    <div class="shield p${v.p} ${v.p===1?"champion":""}">
+    <div class="podium-wrap p${v.p}">
+  <div class="podium-rank">${v.p}º</div>
+
+  <div class="shield p${v.p} ${v.p===1?"champion":""}">
+    </div>
+</div>
       <div class="bg-rank">${v.p}º</div>
       <div class="front">
         ${v.p===1?'<div class="crown">👑</div>':''}
@@ -486,6 +516,7 @@ load();
 </script>
 </body>
 </html>
+
 
 
 

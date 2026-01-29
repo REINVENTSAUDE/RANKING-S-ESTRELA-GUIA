@@ -16,6 +16,7 @@
   --silver:#cbd5e1;
   --bronze:#fb7185;
   --accent:#22d3ee;
+  --shield-shape: polygon(50% 0%,90% 15%,90% 65%,50% 100%,10% 65%,10% 15%);
 }
 
 *{box-sizing:border-box}
@@ -142,16 +143,38 @@ header{margin-bottom:14px}
   animation:fadeUp .35s ease;
   z-index:1;
 }
-  /* Borda flutuante do escudo */
-.shield::before{
+ /* Frame do escudo (a borda fica aqui, não no escudo) */
+.shield-wrap{
+  position:relative;
+  width:100%;
+  max-width:420px;
+  display:block;
+}
+
+/* 1º maior sem esticar */
+.podium-item.place1 .shield-wrap{
+  max-width:460px;
+  transform: scale(1.04);
+  transform-origin: top center;
+}
+
+/* Borda flutuante (fora do escudo, sem cortar) */
+.shield-wrap::before{
   content:"";
   position:absolute;
-  inset:-6px;                 /* distância da borda */
-  clip-path:inherit;          /* mesmo formato do escudo */
-  border-radius:6px;          /* suaviza cantos */
+  inset:-8px; /* distância da borda (gap) */
+  clip-path: var(--shield-shape);
   border:1px solid rgba(255,255,255,.18);
   pointer-events:none;
   z-index:0;
+  opacity:.9;
+}
+
+/* garante que o escudo fique acima da borda */
+.shield-wrap .shield{
+  position:relative;
+  z-index:1;
+  max-width:none;  /* quem manda agora é o shield-wrap */
 }
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(10px)}
@@ -378,14 +401,15 @@ function render(){
     <div class="podium-item place${v.p}">
       <div class="podium-rank">${v.p}º</div>
 
-      <div class="shield shield-${v.p} ${v.p===1 ? "champion" : ""}">
-        <div class="front">
-          ${v.p===1?'<div class="crown">👑</div>':''}
-          <div class="name">${escapeHtml(v.i.name)}</div>
-          <div class="score">${v.i.score}<span>vidas</span></div>
-        </div>
-      </div>
+      <div class="shield-wrap">
+  <div class="shield shield-${v.p} ${v.p===1 ? "champion" : ""}">
+    <div class="front">
+      ${v.p===1?'<div class="crown">👑</div>':''}
+      <div class="name">${escapeHtml(v.i.name)}</div>
+      <div class="score">${v.i.score}<span>vidas</span></div>
     </div>
+  </div>
+</div>
   `).join("");
 
   listEl.innerHTML=items.slice(3).map((i,idx)=>`
@@ -439,6 +463,7 @@ load();
 </script>
 </body>
 </html>
+
 
 
 

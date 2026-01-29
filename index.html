@@ -159,7 +159,17 @@ header{margin-bottom:14px}
   background:linear-gradient(180deg,var(--bronze),#7f1d1d);
   color:#2b0000;
 }
-
+/* Borda flutuante do escudo */
+.shield::before{
+  content:"";
+  position:absolute;
+  inset:-6px;                 /* distância da borda */
+  clip-path:inherit;          /* mesmo formato do escudo */
+  border-radius:6px;          /* suaviza cantos */
+  border:1px solid rgba(255,255,255,.18);
+  pointer-events:none;
+  z-index:-1;
+}
 /* 1º maior SEM esticar */
 .podium-item.place1 .shield{
   max-width: 460px;
@@ -427,4 +437,5 @@ load();
 </script>
 </body>
 </html>
+
 
